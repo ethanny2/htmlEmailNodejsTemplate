@@ -1,0 +1,17 @@
+ .table{
+ 	font-size:16px;
+ },
+ .tr{
+ 	background-color:red;
+ },
+ .td{
+ 	opacity:1;
+ },
+ #someId{
+ 	color:blue;
+ 	padding:10px;
+ 	margin:0 auto;
+ },
+ body{
+ 	display:none;
+ },END
