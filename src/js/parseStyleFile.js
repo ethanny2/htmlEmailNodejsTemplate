@@ -71,10 +71,46 @@
 			}
 		}
 		/*At the end insert the styles inlined into the specified HTML file */
-		gatherPostion(styleArr);
-	});
+		var position = 0;
+		var new_pos = 0;
+		var num = countElements();
+		for(var i=0;i<num;i++){
+		 	//pass in position
+		 	if(new_pos!=undefined){
+		 		new_pos= gatherPostion(styleArr,position);
+		 		console.log(new_pos);
+		 		position= new_pos;
+		 	}
+		 }
+		});
 }
 
+
+
+ /*
+ 	Utility function to count the number of elements in the passed in HTML file
+ 	*/
+ 	function countElements(){
+ 		var fs = require('fs'), filename = process.argv[3];
+ 		data = fs.readFileSync(filename).toString();
+ 		var elemCount=0;
+ 		var curElem = '';
+ 		for(var i=0;i<data.length;i++){
+ 			if(data.charAt(i)=='<' && data.charAt(i+1)!='/'){
+ 				inElem=1;
+ 			}else if(data.charAt(i)=='>' && inElem >0){
+ 				inElem=-1;
+ 				curElem+='>';
+ 				elemCount++;
+ 				console.log('Found: ' + curElem + "as "+elemCount +' index.');
+ 				curElem='';
+ 			}
+ 			if(inElem>0){
+ 				curElem+=data.charAt(i);
+ 			}
+ 		}
+ 		return elemCount;
+ 	}
 
 
 /*Class (one of the ways to define is a function in javascript) to help parse styles 
@@ -117,66 +153,68 @@
   	#1 is better because it also lets the user add their own sytling.
   	Complexity is #of elements * number of style blocks....
   	*/
-  	function gatherPostion(styles){
-  		//console.log(styles);
+  	function gatherPostion(styles,position){
   		var fs = require('fs'), filename = process.argv[3];
-  		fs.readFile(filename, 'utf8', function(err, data){
-  			var styleArr2  = [];
-  			if (err) throw err;
-  			var curElem;
-  			/*Indicates wheather the loop is between 2 '<' and '>' symbols which incidates a new
-  			element */
-  			var inElem=-1; 
-  			for(var i=0;i<data.length;i++){
-  				/* Look for the names in the data, don't parse ending tags. 
-  				For some reason 'undefined' token shows up, strip thatx */
-  				if(data.charAt(i)=='<' && data.charAt(i+1)!='/'){
-  					inElem=1;
-  				}else if(data.charAt(i)=='>' && inElem >0){
-  					/*Element ended append inline styles 1 position before the closing >.*/
-  					inElem=-1
-  					curElem+='>';
-  					//console.log(curElem);
-  					var selector;
-  					var styleString='style="'; // End with '"'
-  					var insertPosition = i-1;
-  					/*See if current element has any matching class, id or element */
-  					for(var j=0;j<styles.length;j++){
-  						/*Construct appropriate substring from style array*/
-  						if(styles[j]['type']==='class='){	
-  							selector = styles[j]['type'] +'"' +styles[j]['name']+'"';
-  						}else if(styles[j]['type']==='id='){
-  							selector = styles[j]['type'] + '"' +styles[j]['name']+'"';
-
-  						}else if(styles[j]['type']===''){
-  							selector = styles[j]['name'];
-  						}  				
-  						//console.log("Selector is: " + selector);
-  						if(curElem.indexOf(selector)>-1){
-  							/* If yes apply the styles save the place to apply the styles */
-  							styleString+= styles[j]['rules'];
-  							//console.log('Contains: ' + selector );
-  							//console.log(styleString);
+  		data = fs.readFileSync(filename).toString();
+  		var styleInstance;
+  		var curElem;
+  		/*Indicates wheather the loop is between 2 '<' and '>' symbols which incidates a new
+  		element */
+  		var inElem=-1; 
+  		for(var i=position;i<data.length;i++){
+  			/* Look for the names in the data, don't parse ending tags. */
+  			if(data.charAt(i)=='<' && data.charAt(i+1)!='/'){
+  				inElem=1;
+  			}else if(data.charAt(i)=='>' && inElem >0){
+  				/*Element ended append inline styles 1 position before the closing >.*/
+  				inElem=-1
+  				curElem+='>';
+  				//console.log(curElem);
+  				var selector;
+  				var styleString= 'style=" '; // End with '"'
+  				var insertPosition = i-1;
+  				/*See if current element has any matching class, id or element */
+  				for(var j=0;j<styles.length;j++){
+  					/*Construct appropriate substring from style array*/
+  					if(styles[j]['type']==='class='){	
+  						selector = styles[j]['type'] +'"' +styles[j]['name']+'"';
+  					}else if(styles[j]['type']==='id='){
+  						selector = styles[j]['type'] + '"' +styles[j]['name']+'"';
+  					}else if(styles[j]['type']===''){
+  						selector = styles[j]['name'];
+  					}  				
+  					if(curElem.indexOf(selector)>-1){
+  						/* If yes apply the styles save the place to apply the styles */
+  						styleString+= styles[j]['rules'].trim();
+  						//console.log('Contains: ' + selector );
+  							// console.log(styleString);
   						}
   					}
-  					styleString+='"';
-  					//console.log(styleString + "insert at : " + insertPosition);
   					var entry = new finalStyle(styleString,insertPosition,styleString.length);
-  					if(styleString!=='style=""'){
-  						styleArr2.push(entry);
-  					}
-  					styleString='style=" ';
-  					curElem='';
-  				} /*else if '>' ending element */
-  				if(inElem>0){
-  					/* Build the string*/
-  					curElem+=data.charAt(i);
-  				}
-  			}
-  			/*Finally use this array of objects to insert into the HTML file */
-  			insertToFile(styleArr2);
-  		});
-  	}
+  					if(styleString!=='style=" '){
+  						styleString+=' ';
+  						styleInstance = (entry);
+  						curElem='';
+  						var content = data.toString();
+  						content = content.substring(styleInstance['start']);
+						var writeFile = fs.openSync(filename, 'r+'); //Open for reading and writing
+						var buffString = '" '+styleString+content;
+						let buffer = new Buffer(buffString);	
+						fs.writeSync(writeFile, buffer,0,buffer.length,styleInstance['start']);
+						fs.close(writeFile, function() {
+							console.log('wrote the file successfully');
+						});	
+						/* Reopen the file but skip current element */
+						return styleInstance['end'] ;
+						break;
+					}
+				} /*else if '>' ending element */
+				if(inElem>0){
+					/* Build the string*/
+					curElem+=data.charAt(i);
+				}
+			} /*i for loop */
+		}
 
   	/*
   		Function that takes the finalStyle object array and inserts the data at appropriate
@@ -184,33 +222,30 @@
   		@param dataArr array of finalStyles they have they position to be inserted and ended at
   		plus the data of the inline style.
   		*/
-  	function insertToFile(dataArr){
-  		//console.log(dataArr);
-  		var fs = require('fs'), filename = process.argv[3];
-		// open the file in writing mode, adding a callback function where we do the actual writing
-		fs.open(filename, 'w', function(err, fd) {  
-			if (err) {
-				throw 'could not open file: ' + err;
-			}
-			for(var i=0 ; i<1; i++){
-				console.log('Starting new loop i: ' + i );
-				//console.log(dataArr[i]['styleString'].trim());
-				let buffer = new Buffer(dataArr[i]['styleString']);
-				//console.log(buffer.length);
-				//console.log(dataArr[i]['start']); //47 +89 >
-				//console.log(buffer);
-				fs.write(fd, buffer,0,buffer.length,dataArr[i]['start'] ,function(err){
-					if (err) throw 'error writing file: ' + err;
-
-				})
-			}/* i loop*/
-			fs.close(fd, function() {
-				console.log('wrote the file successfully');
-			});	
-		}); /*fs.open*/
-	}
+  		function insertToFile(data){
+  			//console.log(data);
+  			var curStyle= data.styleString;
+  			var startPosition = data.start;
+  			var fs = require('fs'), filename = process.argv[3];
+			// open the file in writing mode, adding a callback function where we do the actual writing
+			fs.readFile(filename ,function(err,data){  
+				if (err) {
+					throw 'could not open file: ' + err;
+				}
+				var content = data.toString();
+				content = content.substring(startPosition);
+				var writeFile = fs.openSync(filename, 'r+'); //Open for reading and writing
+				var buffString = '" '+curStyle+content;
+				let buffer = new Buffer(buffString);	
+				console.log(curStyle);		
+				fs.writeSync(writeFile, buffer,0,buffer.length,startPosition);
+				fs.close(writeFile, function() {
+					console.log('wrote the file successfully');
+				});	
+			}); /*fs.readFile*/
+		}
 
 
-	parseStyles();
+		parseStyles();
 
 
