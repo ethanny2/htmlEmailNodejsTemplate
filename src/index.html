@@ -1,33 +1,52 @@
+<!-- Remove later notes:
+-Main table/container must had 600px width
+-Web Email clients have their own CSS defaults, that may conflict with your defaults. So you have to "undo" these changes as necessary. 
+
+OUTLOOK SUPPORT
+  - only one class on one HTML element (trying to support outlook)
+  -No complex selectors
+  - Use <center> element to position main container in middle of screen.
+  -RULE number one is that you should only modify the background-color, color and padding properties.
+
+-->
 <html>
-  <head>
-  </head>
-  <body id="someId" style=" color:blue; padding:10px; margin:0 auto;display:none; background-color:black; ">
-    <table class="my_table" style=" font-size:16px; ">
-      <tr class="my_tr" style=" background-color:red; ">
-        <td class="my_td" style=" opacity:1; "></td>
+
+<head>
+  <title>Simple One Column Layout [HTML EMAIL]</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+</head>
+
+<body id="someId">
+  <center>
+    <table class="container600" cellpadding="0" cellspacing="0">
+      <tr class="my_tr">
+        <td class="container-cell">TESTING</td>
       </tr>
-      <tr class="my_tr" style=" background-color:red; ">
+      <tr class="my_tr">
         <td>
-          <table class="my_table" style=" font-size:16px; ">
-            <tr class="my_tr" style=" background-color:red; ">
-              <td class="my_td" style=" opacity:1; "></td>
-              <td class="my_td" style=" opacity:1; "></td>
+          <table class="my_table">
+            <tr class="my_tr">
+              <td class="my_td"></td>
+              <td class="my_td"></td>
             </tr>
           </table>
         </td>
       </tr>
-      <tr class="my_tr" style=" background-color:red; ">
+      <tr class="my_tr">
         <td>
-          <table class="my_table" style=" font-size:16px; ">
-            <tr class="my_tr" style=" background-color:red; ">
-              <td  id="someId" style=" color:blue; padding:10px; margin:0 auto; "></td>
-              <td  id="someId" style=" color:blue; padding:10px; margin:0 auto; "></td>
-              <td></td>
+          <table class="my_table">
+            <tr class="my_tr">
+              <td id="someId">TESTING</td>
+              <td id="someId">TESTING</td>
+              <td>TESTING</td>
             </tr>
           </table>
         </td>
       </tr>
     </table>
-  </body>
+  </center>
+</body>
 
 </html>

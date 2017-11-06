@@ -16,6 +16,9 @@ var $ = cheerio.load("");
 	As opposed to placing mulitple <td> elements in a <tr> element to create multiple-columns a new
 	table (with its own <tr> and <td> elements) is constructed and placed within the main table of the 
 	layoutWrapper var <table><tr><td>....Output of createMultiColumn </td></tr>
+
+	Note: First table 
+
 */ 
 	function createLayout () {
 		if (process.argv.length < 3) {
@@ -24,7 +27,7 @@ var $ = cheerio.load("");
 		}
 
 
-		var layoutWrapper = $("<table></table>");
+		var layoutWrapper = $('<table cellpadding="0" cellspacing="0"></table>');
 		var layoutSetupList = process.argv; 
 
 		/*Iterating through the command line (process.argv) args. Note we start at 2 because in the
@@ -56,7 +59,7 @@ var $ = cheerio.load("");
 
 	function createMultiColumn(columnCount) {
 		/*Create new table and add loop through columnCount var appending one <td> element for each */
-		var multiColTable = $("<table></table>");
+		var multiColTable = $('<table cellpadding="0" cellspacing="0"></table>');
 		var tr = $("<tr></tr>");
 		multiColTable.append(tr);
 		for (var cols = 0; cols < columnCount; cols += 1) { 
