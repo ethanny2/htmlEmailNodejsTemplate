@@ -1,9 +1,34 @@
 /*
-	Takes in command line arg text file  in the format specified below. Classes/styles are
-	separated by commas, (even the final one). (e.g body{color:red}, p{display:none},)
+	Takes in command line arg text file  in the format specified below. 
+	(New version should take in normal css files no need for commas)
+
+	Problems:
+			-Does not inline styles separated by commas e.g
+			h1,h2,h3{
+				color:red;
+			}
+
+			-Does not support child classes like 
+			.exampleClass p {
+				color:blue;
+			}
+			(This any p class that's parent is an example class)
+
+	Solutions: 
+	1) Just realized I can use cheerio to load in the hmtl file passed via the command line.
+	(Nearly identical syntax to jquery) With this I just need to save the name of one style block
+	and the rules associated with it. Then when inserting into the file I will do...
+	$(styleObj['name']).attr('style',styleObj['rules']).
+
+
+
 	*/
+
+
+
 	function parseStyles() {
-    //Array with each index containing a class/styles 
+    // var pretty = require("../../node_modules/pretty");
+    // var cheerio = require("../../node_modules/cheerio");
     var currentComma = 0;
     // Make sure we got a filename on the command line.
     if (process.argv.length < 4) {
@@ -14,54 +39,49 @@
     var fs = require('fs'),filename = process.argv[2];
     fs.readFile(filename, 'utf8', function(err, data) {
     	if (err) throw err;
-    	var styleArr = [];
-    	for (var i = 0; i < data.length; i++) {
-            /*Check if the comma is from a "complex" style defintion targeting 2 or more classes
-            WHICH YOU'RE not supposed to do, but just as a precation */
-            if (data.charAt(i) == ',' && data.charAt(i - 1) == '}') {
-            	/* Construct new instance of styleObj and add it to the array */
-            	var rawString = data.substring(currentComma, i);
-            	var entry = new styleObj();
-            	/*Gets the name in front of the style (could be .class ,#id , normal elem)*/
-            	var name = rawString.substring(0, rawString.indexOf('{'));
-            	/*Check what type of selector it is, and remove [. or  #] selector if present */
-            	if (name.indexOf('.') > -1) {
-            		entry.type = 'class=';
-            		name = name.replace('.', '');
-            		name = name.trim();
+        // $ = cheerio.load(fs.readFileSync(filename));
+        // var test = $(' body#someId').attr('style',' h1,h2,h3,h4,h5,h6{color: black !important;}');
+        // console.log($.html());
+        // process.exit(1);
+        var styleArr = [];
+        var index = 0;
+        var entry = new styleObj();
+        for (var i = 0; i < data.length; i++) {
+        	if (data.charAt(i) === '{'){
+        		/* Construct new instance of styleObj and add it to the array */
+        		var name = data.substring(index, i);        		
+        		/*Gets the name in front of the style*/
+        		//var name = rawString.substring(0, rawString.indexOf('{'));
+        		name = name.replace(/[\n\t\r]/g,"");
 
-            	} else if (name.indexOf('#') > -1) {
-            		entry.type = 'id=';
-            		name = name.replace('#', '');
-            		name = name.trim();
-
-            	} else {
-            		/*Must be a normal element*/
-            		entry.type = ''
-            		name = name.trim();
-            	}
-            	entry.name = name;
-            	/*Construct the rules for the selected style */
-            	var styles = rawString.substring(rawString.indexOf('{') + 1, rawString.indexOf('}'));
+        		entry.name = name;
+        		index = i + 1;
+        	}else if(data.charAt(i)==='}'){
+            	//	/*Construct the rules for the selected style */
+            	var styles = data.substring(index, i);
             	/*Replace all new lines chars (on all 3 OS's) with '' via regex*/
-            	styles = styles.replace(/(\r\n|\n|\r)/gm, "");
-            	styles = styles.replace(/\t/g, '');
+            	styles = styles.replace(/[\n\t\r]/g,"");
+            	//styles = styles.replace(/\t/g, '');
+            	console.log('***************');
+            	console.log(styles);
+            	console.log('***************');
             	entry.rules = styles;
-            	currentComma = i + 1;
+            	index = i + 1;
             	styleArr.push(entry);
+            	console.log(entry);
             }
         }
         /*At the end insert the styles inlined into the specified HTML file */
-        var position = 0;
-        var new_pos = 0;
-        var num = countElements();
-        for (var i = 0; i < num; i++) {
-        	if (new_pos !== undefined || new_pos!== null) {
-        		new_pos = inlineStyles(styleArr, position);
-        		console.log(new_pos + ' at position i ' + i);
-        		position = new_pos;
-        	}
-        }
+        // var position = 0;
+        // var new_pos = 0;
+        // var num = countElements();
+        // for (var i = 0; i < num; i++) {
+        // 	if (new_pos !== undefined || new_pos !== null) {
+        // 		new_pos = inlineStyles(styleArr, position);
+        // 		console.log(new_pos + ' at position i ' + i);
+        // 		position = new_pos;
+        // 	}
+        // }
     });
 }
 
@@ -72,7 +92,8 @@
 	how many times to loop through the file
 	*/
 	function countElements() {
-		var fs = require('fs'),filename = process.argv[3];
+		var fs = require('fs'),
+		filename = process.argv[3];
 		data = fs.readFileSync(filename).toString();
 		var elemCount = 0;
 		var curElem = '';
@@ -119,7 +140,8 @@
 	(This is to be used after the user has generated and filled out their HTML classes)
 	*/
 	function inlineStyles(styles, position) {
-		var fs = require('fs'),filename = process.argv[3];
+		var fs = require('fs'),
+		filename = process.argv[3];
 		data = fs.readFileSync(filename).toString();
 		var styleInstance;
 		var curElem;
@@ -152,14 +174,14 @@
             		styleString += styles[j]['rules'].trim();
             	}
             }
-           // var entry = new finalStyle(styleString, insertPosition, styleString.length);
-           if (styleString !== 'style=" ') {
-           	styleString += ' "';
-               // styleInstance = (entry);
-               curElem = '';
-               var content = data.toString();
-               content = content.substring(insertPosition+1);
-               content+=' ';
+            // var entry = new finalStyle(styleString, insertPosition, styleString.length);
+            if (styleString !== 'style=" ') {
+            	styleString += ' "';
+                // styleInstance = (entry);
+                curElem = '';
+                var content = data.toString();
+                content = content.substring(insertPosition + 1);
+                content += ' ';
                 var writeFile = fs.openSync(filename, 'r+'); //Open for reading and writing
                 var buffString = '" ' + styleString + content;
                 let buffer = new Buffer(buffString);
@@ -180,22 +202,6 @@
     } /*i for loop */
 }
 
-
-/*Function to add some common boilerplate code into the <head> tag. 
-Call after every style that can be inlined has already been inlined*/
-function addBoilerPlateCode(){
-	var headElem = document.head.innerHTML;
-	var htmlElem = document.documentElement;
-	var styleElem = $('<style></style>');
-	headElem.append('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>');
-	headElem.append('<meta name="format-detection" content="telephone=no">'); 
-	headElem.append('<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;">');
-	headElem.append('<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />');
-	htmlElem.setAttribute('xmlns', '"http://www.w3.org/1999/xhtml"',);
-	/*Outlook fixes */
-	styleElem.append();
-
-}
 
 
 parseStyles();

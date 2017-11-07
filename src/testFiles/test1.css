@@ -1,23 +1,23 @@
  .my_table{
  	font-size:16px;
- },
+ }
  .my_tr{
  	background-color:red;
- },
+ }
  .my_td{
  	opacity:1;
- },
+ }
  #someId{
  	color:blue;
  	padding:10px;
  	margin:0 auto;
- },
+ }
 td{
 	padding:30px;
 	border-radius: 30px;
- },
+ }
  body{
  	display:initial;
 	font-family:verdana;
  	background-color:white;
- },
+ }
