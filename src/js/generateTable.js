@@ -78,6 +78,7 @@ function addBoilerPlateCode(){
 	var headElem = $("head");
 	var styleElem = $("<style></style>");
 	var htmlElem  = $('html');
+
 	htmlElem.attr('xmlns','http://www.w3.org/1999/xhtml');
 	htmlElem.attr(' xmlns:o','urn:schemas-microsoft-com:office:office');
 	htmlElem.attr('xmlns:v','urn:schemas-microsoft-com:vml');
@@ -85,14 +86,16 @@ function addBoilerPlateCode(){
 	headElem.append('<meta name="format-detection" content="telephone=no">'); 
 	headElem.append('<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;">');
 	headElem.append('<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />');
-	//htmlElem.setAttribute('xmlns', '"http://www.w3.org/1999/xhtml"');
-	/*Outlook fixes	 */
+	
+	/*<-------------------INLINE THESE STYLES------------------------> */
+	/*Outlook fixes	*/
 	styleElem.append('#outlook a { padding:0; }');
 	styleElem.append('body{ width:100% !important; -webkit-text; size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0; }');
 	styleElem.append('.backgroundTable {margin:0 auto; padding:0; width:100%;!important;}');
 	styleElem.append('.ExternalClass {width:100%;}');
 	styleElem.append('.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div{line-height: 110%;}');
 	styleElem.append('.ReadMsgBody {width: 100%;background-color: grey;}');
+	styleElem.append('#backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}');
 	/*Override green header color in outlook*/
 	styleElem.append('h2{color:#0066CC !important;}'); 
 	/*Make images resize nicely on IE */
@@ -107,13 +110,16 @@ function addBoilerPlateCode(){
 	/*Reset of hotmail header colors */
 	styleElem.append('h1, h2, h3, h4, h5, h6 {color: black !important;}');
 	styleElem.append('h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: blue !important;}');
+	styleElem.append('table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }');
+	/*Yahoo uniform link color */
+	styleElem.append('a {color: orange;}');
+
+	/*<-------------------INLINE THESE STYLES------------------------> */
 	styleElem.append('h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {color: red !important;}');
 	styleElem.append('h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {color: purple !important;}');
 	/*Fix of more table padding and spacing in Outlook 2010 */
 	styleElem.append('table td {border-collapse: collapse;}');
-	styleElem.append('table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }');
-	/*Yahoo uniform link color */
-	styleElem.append('a {color: orange;}');
+	
 	/* To prevent yahoo from converting keywords into links*/
 	styleElem.append('.yshortcuts a{background: none !important;border-bottom: none !important;}');
 
@@ -141,6 +147,8 @@ function addBoilerPlateCode(){
 
 /*Append to body and see console output */
 var layout = createLayout();
+/*Add something to the body <body yahoo> to  create a HACK that prevents yahoo mail clients from automatically
+activating media queries at inappropriate times*/
 $("body").append(layout);
 addBoilerPlateCode();
 console.log(pretty($.html()));

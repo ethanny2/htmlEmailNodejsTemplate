@@ -18,18 +18,14 @@
 	1) Just realized I can use cheerio to load in the hmtl file passed via the command line.
 	(Nearly identical syntax to jquery) With this I just need to save the name of one style block
 	and the rules associated with it. Then when inserting into the file I will do...
-	$(styleObj['name']).attr('style',styleObj['rules']).
-
-
+	$(styleObj['name']).attr('style',styleObj['rules'])
 
 	*/
 
 
 
 	function parseStyles() {
-    // var pretty = require("../../node_modules/pretty");
-    // var cheerio = require("../../node_modules/cheerio");
-    var currentComma = 0;
+		var currentComma = 0;
     // Make sure we got a filename on the command line.
     if (process.argv.length < 4) {
     	console.log('Usage: node ' + process.argv[1] + ' STLYES_FILE HTMLOUTPUTFILE');
@@ -39,80 +35,127 @@
     var fs = require('fs'),filename = process.argv[2];
     fs.readFile(filename, 'utf8', function(err, data) {
     	if (err) throw err;
-        // $ = cheerio.load(fs.readFileSync(filename));
-        // var test = $(' body#someId').attr('style',' h1,h2,h3,h4,h5,h6{color: black !important;}');
-        // console.log($.html());
-        // process.exit(1);
-        var styleArr = [];
-        var index = 0;
-        var entry = new styleObj();
-        for (var i = 0; i < data.length; i++) {
-        	if (data.charAt(i) === '{'){
-        		/* Construct new instance of styleObj and add it to the array */
-        		var name = data.substring(index, i);        		
-        		/*Gets the name in front of the style*/
-        		//var name = rawString.substring(0, rawString.indexOf('{'));
-        		name = name.replace(/[\n\t\r]/g,"");
-
-        		entry.name = name;
-        		index = i + 1;
-        	}else if(data.charAt(i)==='}'){
-            	//	/*Construct the rules for the selected style */
-            	var styles = data.substring(index, i);
-            	/*Replace all new lines chars (on all 3 OS's) with '' via regex*/
-            	styles = styles.replace(/[\n\t\r]/g,"");
-            	//styles = styles.replace(/\t/g, '');
-            	console.log('***************');
-            	console.log(styles);
-            	console.log('***************');
-            	entry.rules = styles;
-            	index = i + 1;
-            	styleArr.push(entry);
-            	console.log(entry);
-            }
-        }
-        /*At the end insert the styles inlined into the specified HTML file */
-        // var position = 0;
-        // var new_pos = 0;
-        // var num = countElements();
-        // for (var i = 0; i < num; i++) {
-        // 	if (new_pos !== undefined || new_pos !== null) {
-        // 		new_pos = inlineStyles(styleArr, position);
-        // 		console.log(new_pos + ' at position i ' + i);
-        // 		position = new_pos;
-        // 	}
-        // }
+    	var styleArr = [];
+    	var index = 0;
+    	var name;
+    	for (var i = 0; i < data.length; i++) {
+    		if (data.charAt(i) === '{'){
+    			name = data.substring(index, i);        		         
+    			name = name.replace(/[\n\t\r]/g,"");
+    			index = i + 1;
+    		}else if(data.charAt(i)==='}'){
+    			var entry = new styleObj();
+    			entry.name = name;
+    			name = '';
+    			/*Construct the rules for the selected style */
+    			var styles = data.substring(index, i);
+    			/*Replace all new lines chars (on all 3 OS's) with '' via regex*/
+    			styles = styles.replace(/[\n\t\r]/g,"");
+    			entry.rules = styles;
+    			index = i + 1;
+    			styleArr.push(entry);
+    		}
+    	}
+    	addBoilerPlateStyles(styleArr);
+    	inlineStyles(styleArr);
     });
 }
 
 
+ /*
+ 	Utility function to add some boilerplate code to be inlined.
+ 	@param The style array from the first function.
+ 	*/ 
+ function addBoilerPlateStyles(stylesArr){
+ 	/*<-------------------INLINE THESE STYLES------------------------> */
+ 	/*Outlook fixes	*/
+ 	var entry =  new styleObj();
+ 	entry.name = '#outlook a';
+ 	entry.rules = 'padding:0;';
+ 	stylesArr.push(entry);
 
-/*
-	Utility function to count the number of elements in the passed in HTML file. To determine
-	how many times to loop through the file
-	*/
-	function countElements() {
-		var fs = require('fs'),
-		filename = process.argv[3];
-		data = fs.readFileSync(filename).toString();
-		var elemCount = 0;
-		var curElem = '';
-		for (var i = 0; i < data.length; i++) {
-			if (data.charAt(i) == '<' && data.charAt(i + 1) != '/') {
-				inElem = 1;
-			} else if (data.charAt(i) == '>' && inElem > 0) {
-				inElem = -1;
-				curElem += '>';
-				elemCount++;
-				console.log('Found: ' + curElem + "as " + elemCount + ' index.');
-				curElem = '';
-			}
-			if (inElem > 0) {
-				curElem += data.charAt(i);
-			}
-		}
-		return elemCount;
-	}
+ 	var entry =  new styleObj();
+ 	entry.name = 'body';
+ 	entry.rules = 'width:100% !important; -webkit-text; size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = '.backgroundTable';
+ 	entry.rules = 'margin:0 auto; padding:0; width:100%;!important;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = '.ExternalClass';
+ 	entry.rules = 'width:100%;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = '.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div';
+ 	entry.rules = 'line-height:110%;';
+ 	stylesArr.push(entry);
+
+ 	var entry =  new styleObj();
+ 	entry.name = '.ReadMsgBody';
+ 	entry.rules = 'width: 100%;background-color: grey;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = '#backgroundTable';
+ 	entry.rules = 'margin:0; padding:0; width:100% !important; line-height: 100% !important;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = 'h2';
+ 	entry.rules = 'color:#0066CC !important;';
+ 	stylesArr.push(entry);
+  	
+  	var entry =  new styleObj();
+  	entry.name = 'table';
+ 	entry.rules = 'mso-table-lspace: 0pt;mso-table-rspace: 0pt;';
+ 	stylesArr.push(entry);
+ 	
+
+ 	var entry =  new styleObj();
+ 	entry.name = 'img';
+ 	entry.rules = '-ms-interpolation-mode: bicubic;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = 'a img';
+ 	entry.rules = 'border:none;';
+ 	stylesArr.push(entry);
+  	
+  	var entry =  new styleObj();
+  	entry.name = '.image_fix';
+ 	entry.rules = 'display:block;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = 'p';
+ 	entry.rules = 'margin: 1em 0;';
+ 	stylesArr.push(entry);
+ 	
+
+  	var entry =  new styleObj();
+ 	entry.name = 'h1, h2, h3, h4, h5, h6';
+ 	entry.rules = 'color: black !important;';
+ 	stylesArr.push(entry);
+ 	
+ 	var entry =  new styleObj();
+ 	entry.name = 'h1 a, h2 a, h3 a, h4 a, h5 a, h6 a';
+ 	entry.rules = 'color: blue !important;';
+ 	stylesArr.push(entry);
+ 
+  	var entry =  new styleObj();
+ 	entry.name = 'table';
+ 	entry.rules = 'border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;';
+ 	stylesArr.push(entry);
+
+ 	var entry =  new styleObj();
+ 	entry.name = 'a';
+ 	entry.rules = 'color: orange;';
+ 	stylesArr.push(entry); 
+ }
 
 
 /*Class (one of the ways to define is a function in javascript) to help parse styles 
@@ -125,7 +168,6 @@
   */
   function styleObj() {
   	this.name = "";
-  	this.type = "";
   	this.rules = "";
   }
 
@@ -139,72 +181,37 @@
 	do not overlap)
 	(This is to be used after the user has generated and filled out their HTML classes)
 	*/
-	function inlineStyles(styles, position) {
-		var fs = require('fs'),
-		filename = process.argv[3];
-		data = fs.readFileSync(filename).toString();
+	function inlineStyles(styles) {
+		var fs = require('fs'),	filename = process.argv[3];
+		console.log(styles);
+		var cheerio = require("../../node_modules/cheerio");
+		var data = fs.readFileSync(filename).toString();
+		$ = cheerio.load(data);
+		//console.log($.html());
+		//process.exit(1);
 		var styleInstance;
 		var curElem;
-    /*Indicates wheather the loop is between 2 '<' and '>' symbols which incidates a new
-    element */
-    var inElem = -1;
-    for (var i = position; i < data.length; i++) {
-    	/* Look for the names in the data, don't parse ending tags. */
-    	if (data.charAt(i) == '<' && data.charAt(i + 1) != '/') {
-    		inElem = 1;
-    	} else if (data.charAt(i) == '>' && inElem > 0) {
-    		/*Element ended append inline styles 1 position before the closing >.*/
-    		inElem = -1
-    		curElem += '>';
-    		var selector;
-            var styleString = 'style=" '; // End with '"'
-            var insertPosition = i - 1;
-            /*See if current element has any matching class, id or element */
-            for (var j = 0; j < styles.length; j++) {
-            	/*Construct appropriate substring from style array*/
-            	if (styles[j]['type'] === 'class=') {
-            		selector = styles[j]['type'] + '"' + styles[j]['name'] + '"';
-            	} else if (styles[j]['type'] === 'id=') {
-            		selector = styles[j]['type'] + '"' + styles[j]['name'] + '"';
-            	} else if (styles[j]['type'] === '') {
-            		selector = styles[j]['name'];
-            	}
-            	if (curElem.indexOf(selector) > -1) {
-            		/* If yes apply the styles */
-            		styleString += styles[j]['rules'].trim();
-            	}
-            }
-            // var entry = new finalStyle(styleString, insertPosition, styleString.length);
-            if (styleString !== 'style=" ') {
-            	styleString += ' "';
-                // styleInstance = (entry);
-                curElem = '';
-                var content = data.toString();
-                content = content.substring(insertPosition + 1);
-                content += ' ';
-                var writeFile = fs.openSync(filename, 'r+'); //Open for reading and writing
-                var buffString = '" ' + styleString + content;
-                let buffer = new Buffer(buffString);
-                fs.writeSync(writeFile, buffer, 0, buffer.length, insertPosition);
-                fs.close(writeFile, function() {
-                	console.log('wrote the file successfully');
-                });
-                /* Reopen the file but skip current element, return the insert position of the
-                string + the length of the string to figure out where to search from */
-                return insertPosition + styleString.length;
-                break;
-            }
-        } /*else if '>' ending element */
-        if (inElem > 0) {
-        	/* Build the string*/
-        	curElem += data.charAt(i);
-        }
-    } /*i for loop */
-}
+		var inElem = -1;
+		for (var i = 0; i < styles.length; i++) {
+			$(styles[i]['name']).attr("style", function(){
+				var retVal = $(this).attr("style");
+				/*Converting undefined retval obj to empty string literal */
+				retVal = (retVal || '') + '';
+				return retVal + styles[i]['rules']; 	
+			});
+		} /*i for loop */ 
+		console.log($.html());
+		var writeData = ($.html());
+        var writeFile = fs.openSync(filename, 'r+'); //Open for reading and writing
+        var buffString = writeData;
+        let buffer = new Buffer(buffString);
+        fs.writeSync(writeFile, buffer, 0, buffer.length, 0);
+        fs.close(writeFile, function() {
+        	console.log('wrote the file successfully');
+        }); 
+    }
 
-
-
-parseStyles();
+    parseStyles();
 
 
 
