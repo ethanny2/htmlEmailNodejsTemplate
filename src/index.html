@@ -1,49 +1,470 @@
-<!-- Remove later notes:
--Main table/container must had 600px width
--Web Email clients have their own CSS defaults, that may conflict with your defaults. So you have to "undo" these changes as necessary. 
-
-OUTLOOK SUPPORT
-  - only one class on one HTML element (trying to support outlook)
-  -No complex selectors
-  - Use <center> element to position main container in middle of screen.
-  -RULE number one is that you should only modify the background-color, color and padding properties.
-
--->
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-  <title>Simple One Column Layout [HTML EMAIL]</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../src/testFiles/true_styling.css" />
+    <!--[if (gte mso 9)|(IE)]>
+    <style type="text/css">
+        table {border-collapse: collapse;}
+    </style>
+    <![endif]-->
 </head>
 
-<body id="someId">
-  <center>
-    <table class="container600" cellpadding="0" cellspacing="0">
-      <tr class="my_tr">
-        <td class="container-cell">TESTING</td>
-      </tr>
-      <tr class="my_tr">
-        <td>
-          <table class="my_table">
-            <tr class="my_tr">
-              <td class="my_td"></td>
-              <td class="my_td"></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr >
-        <td>
-          <table class="my_table">
-            <tr class="my_tr">
-              <td id="someId">TESTING</td>
-              <td id="someId">TESTING</td>
-              <td>TESTING</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </center>
+<body>
+    <center class="wrapper">
+        <div class="webkit">
+            <!--[if (gte mso 9)|(IE)]>
+            <table width="600" align="center" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td>
+            <![endif]-->
+            <table class="outer" align="center">
+                <!-- 1ST ROW Outermost table unless outlook generates one with conditional statements.-->
+                <tr>
+                    <td class="full-width-image">
+                        <!-- ###IMAGECONTENT###  <img  width="600"/> -->
+                        <img src="assets/header.jpg" width="600"/> 
+                    </td>
+                </tr>
+                <!-- END FIRST ROW -->
+                <!-- SECOND ROW -->
+                <tr>
+                    <td class="one-column">
+                        <!-- 1 COLUMN HEADER -->
+                        <table width="100%">
+                            <tr>
+                                <td class="inner contents">
+                                    <p class="h1">Lorem ipsum dolor sit amet</p>
+                                    <p>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- END SECOND ROW -->
+
+
+
+
+
+
+
+
+                <!-- 3RD ROW-->
+                <tr>
+                    <td class="two-column">
+                        <!-- 2 COLUMNS -->
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td width="50%" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <!-- CONTENTS  -->
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="280"/> -->
+                                                    <img src="../src/assets/two-column-01.jpg" width="280" alt="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- CONTENTS -->
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="50%" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <!-- CONTENTS  ONE <tr><td> for image one for text-->
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="280"/> -->
+                                                    <img src="../src/assets/two-column-02.jpg" width="280" alt="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- CONTENTS -->
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                            </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!--END 3RD ROW-->
+
+
+                <!-- 7th row showing 2 rows of 2. -->
+                <tr>
+                    <td class="two-column">
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td width="300" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner contents">
+                                        <p class="h2">Heading</p>
+                                        <p>Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                        <p><a href="#">Read more</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="300" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner contents">
+                                        <p class="h2">Heading</p>
+                                        <p>Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                        <p><a href="#">Read more</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300" valign="top">
+                        <![endif]-->
+                      
+                    </td>
+                </tr>
+                <!-- END OF 7TH ROW -->
+
+
+
+
+
+
+
+                <!-- 4TH ROW -->
+                <tr>
+                    <td class="three-column">
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                        <!-- COL 1 OF 3 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="180"/> -->
+                                                    <img src="../src/assets/three-column-01.jpg" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 1 OF 3 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                        <!-- COL 2 OF 3 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="180"/> -->
+                                                    <img src="../src/assets/three-column-02.jpg" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 2 OF 3 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                        <!-- COL 3 OF 3 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="180"/> -->
+                                                    <img src="../src/assets/three-column-03.jpg" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 3 OF 3 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                            </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!-- END 4TH ROW -->
+                <!-- 5th ROW -->
+                <tr>
+                    <td class="three-column">
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner contents">
+                                        <p class="h2">Heading</p>
+                                        <p>Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                        <p><a href="#">Read more</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner contents">
+                                        <p class="h2">Heading</p>
+                                        <p>Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                        <p><a href="#">Read more</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner contents">
+                                        <p class="h2">Heading</p>
+                                        <p>Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                        <p><a href="#">Read more</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="200" valign="top">
+                        <![endif]-->
+                      
+                    </td>
+                </tr>
+                <!-- END 5TH ROW -->
+                <!-- Start of 6th ROW -->
+                <tr>
+                    <td class="four-column">
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td width="150" valign="top">
+                        <![endif]-->
+                        <!-- COL 1 OF 3 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="130"/> -->
+                                                    <img src="../src/assets/ic_android_black_24dp_2x.png" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 1 OF 4 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="150" valign="top">
+                        <![endif]-->
+                        <!-- COL 2 OF 4 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="130"/> -->
+                                                     <img src="../src/assets/ic_android_black_24dp_2x.png" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 2 OF 4 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="150" valign="top">
+                        <![endif]-->
+                        <!--  COL 3 OF 4 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="130"/> -->
+                                                    <img src="../src/assets/ic_android_black_24dp_2x.png" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 3 OF 4 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                                <td width="150" valign="top">
+                        <![endif]-->
+                        <!-- COL 4 OF 4 -->
+                        <div class="column">
+                            <table width="100%">
+                                <tr>
+                                    <td class="inner">
+                                        <table class="contents">
+                                            <tr>
+                                                <td>
+                                                    <!-- ###IMAGECONTENT###  <img  width="130"/> -->
+                                                    <img src="../src/assets/ic_android_black_24dp_2x.png" width="180" alt="">
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text">
+                                                    Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END COL 4 OF 4 -->
+                        <!--[if (gte mso 9)|(IE)]>
+                                </td>
+                            </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+                <!-- End of 6th ROW -->
+
+                
+            </table>
+            <!--[if (gte mso 9)|(IE)]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+        </div>
+    </center>
 </body>
 
 </html>

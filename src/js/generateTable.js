@@ -7,27 +7,22 @@ var $ = cheerio.load("");
 
 
 /*
-	A function used to take in commond line arguments (via a nodejs variable),
-	and then set up a table with the specified args.
-	Usage: node generateTable.js arg1 arg2 arg3 .... argx
-	(Where arg must be >1)
-	Example: node generateTable.js 2 2 2 will make a table with 3 rows (# of args) each with 2 columns
-	inside of them. 
-	As opposed to placing mulitple <td> elements in a <tr> element to create multiple-columns a new
-	table (with its own <tr> and <td> elements) is constructed and placed within the main table of the 
-	layoutWrapper var <table><tr><td>....Output of createMultiColumn </td></tr>
+	This will be used to build a layout that should be mostly responsive across email clients without the
+	use of media queroes.
 
-	Note: First table 
-
-	*/ 
+*/ 
 	function createLayout () {
 		if (process.argv.length < 3) {
-			console.log('Usage: node ' + process.argv[1] + ' colnum1 colnum2 colnum3 .... colnumX');
+			console.log('Usage: node ' + process.argv[1] + ' [col # row #] *max for both 4');
 			process.exit(1);
 		}
 
+		/*Create base layout with 1 row for header */
+		var layoutWrapper = $('<center class="wrapper"><div class="webkit"> <!--[if (gte mso 9)|(IE)]><table width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td class="full-width-image"> <![endif]--><table class="outer" align="center">    <!-- FIRST ROW HEADER--><tr><td class="full-width-image"><!-- ###IMAGECONTENT###  <img  width="600"/> --></td></tr><!-- END FIRST ROW --></table> <!--[if (gte mso 9)|(IE)]></td></tr></table> <![endif]--></div>');
+			
 
-		var layoutWrapper = $('<table cellpadding="0" cellspacing="0"></table>');
+
+		/*Here the user will pass in 2 numbers. #rows #cols */
 		var layoutSetupList = process.argv; 
 
 		/*Iterating through the command line (process.argv) args. Note we start at 2 because in the
@@ -69,6 +64,13 @@ var $ = cheerio.load("");
 		return multiColTable;
 	}
 
+	//1 ROW 1 COL
+	//<tr><td class="one-column"><table width="100%"><tr><td class="inner contents"><p class="h1">Lorem ipsum dolor sit amet</p><p>Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.</p></td></tr></table></td></tr>
+	// 1 row 2 cols
+	//<tr><td class="two-column"> <!--[if (gte mso 9)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="50%" valign="top"> <![endif]--><div class="column"><table width="100%"><tr><td class="inner"><table class="contents"><tr><td></td></tr><tr><td class="text"> Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr></table></td></tr></table></div> <!--[if (gte mso 9)|(IE)]></td><td width="50%" valign="top"> <![endif]--><div class="column"><table width="100%"><tr><td class="inner"><table class="contents"><tr><td></td></tr><tr><td class="text"> Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td></tr></table></td></tr></table></div> <!--[if (gte mso 9)|(IE)]></td></tr></table> <![endif]--></td></tr>
+	
+	//1 row 3 cols
+	//<tr><td class="three-column"> <!--[if (gte mso 9)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="200" valign="top"> <![endif]--><div class="column"><table width="100%"><tr><td class="inner"><table class="contents"><tr><td></td></tr><tr><td class="text"> Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.</td></tr></table></td></tr></table></div> <!--[if (gte mso 9)|(IE)]></td><td width="200" valign="top"> <![endif]--><div class="column"><table width="100%"><tr><td class="inner"><table class="contents"><tr><td></td></tr><tr><td class="text"> Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.</td></tr></table></td></tr></table></div> <!--[if (gte mso 9)|(IE)]></td><td width="200" valign="top"> <![endif]--><div class="column"><table width="100%"><tr><td class="inner"><table class="contents"><tr><td></td></tr><tr><td class="text"> Scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut erat.</td></tr></table></td></tr></table></div> <!--[if (gte mso 9)|(IE)]></td></tr></table> <![endif]--></td></tr>
 
 
 
