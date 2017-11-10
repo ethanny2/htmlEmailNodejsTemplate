@@ -51,6 +51,15 @@
     			var styles = data.substring(index, i);
     			/*Replace all new lines chars (on all 3 OS's) with '' via regex*/
     			styles = styles.replace(/[\n\t\r]/g,"");
+          /*replace with a space to make sure its inlined correctly from minified css*/
+          styles = styles.replace(';','; ');
+          /* Last rules in the style block has optional semicolon see if it e*/
+          if(styles.charAt(styles.length-1)!==';'){
+            /*append a semicolon*/
+            styles+='; '
+          }
+         // console.log(styles);
+          //console.log(styles.charAt(styles.length-1));
     			entry.rules = styles;
     			index = i + 1;
     			styleArr.push(entry);
@@ -183,7 +192,7 @@
 	*/
 	function inlineStyles(styles) {
 		var fs = require('fs'),	filename = process.argv[3];
-		console.log(styles);
+	//	console.log(styles);
 		var cheerio = require("../../node_modules/cheerio");
 		var data = fs.readFileSync(filename).toString();
 		$ = cheerio.load(data);
@@ -200,7 +209,7 @@
 				return retVal + styles[i]['rules']; 	
 			});
 		} /*i for loop */ 
-		console.log($.html());
+		//console.log($.html());
 		var writeData = ($.html());
         var writeFile = fs.openSync(filename, 'r+'); //Open for reading and writing
         var buffString = writeData;

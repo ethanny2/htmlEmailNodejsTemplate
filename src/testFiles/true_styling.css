@@ -70,6 +70,7 @@ a {
 }
 .one-column p {
     font-size: 14px;
+    text-align: center;
     Margin-bottom: 10px;
 }
 
@@ -376,7 +377,7 @@ a {
 }
 
 /*Media Queries*/
-@media screen and (max-width: 400px) {
+/*@media screen and (max-width: 400px) {
     .two-column .column,
     .three-column .column,
     .four-column .column{
@@ -395,8 +396,7 @@ a {
 
 @media screen and (min-width: 401px) and (max-width: 620px) {
    .four-column .column{
-    max-width: 25% !important;
-
+    max-width: 25% !important; 
 }
 .three-column .column {
     max-width: 33% !important;
@@ -404,4 +404,4 @@ a {
 .two-column .column {
     max-width: 50% !important;
 }
-}
+}*/
